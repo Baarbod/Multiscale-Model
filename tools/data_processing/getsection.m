@@ -53,7 +53,7 @@ xyz(zeroRow,:) = [];
 G = rmnode(G,zeroRow);
 Adj = adjacency(G);
 
-[a,~] = largestcomponent(Adj);
+a = largestcomponent(Adj);
 G = subgraph(G,a);
 Adj = adjacency(G);
 xyz = xyz(a,:);
@@ -138,8 +138,9 @@ o.venFullNodePath = venFullNodePath;
 xDim = abs(xRange(1) - xRange(2));
 yDim = abs(yRange(1) - yRange(2));
 zDim = abs(zRange(1) - zRange(2));
-matpath = 'G:\My Drive\matlab\research\kleinfeld_processing\output\matfiles\section\';
-figpath = 'G:\My Drive\matlab\research\kleinfeld_processing\output\figures\vanilla\section\';
+currentFolder = pwd;
+matpath = currentFolder;
+figpath = currentFolder;
 figname = sprintf([name '_sect_' num2str(xDim) '_' num2str(yDim) '_' num2str(zDim)]);
 matname = sprintf([name '_sect_' num2str(xDim) '_' num2str(yDim) '_' num2str(zDim)]);
 saveas(gcf,[figpath figname])
