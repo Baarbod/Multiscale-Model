@@ -15,8 +15,6 @@ function getsection(matfile,xRange,yRange,zRange)
 % Example of output:
 %  first example shown above yields 'au_sect_200_100_900' matfile 
 %
-% Note: Save path is hard coded. Make sure to change the path if needed.
-
 %% Load data
 dat = load(matfile);
 Adj = dat.o.Adj;
@@ -138,13 +136,11 @@ o.venFullNodePath = venFullNodePath;
 xDim = abs(xRange(1) - xRange(2));
 yDim = abs(yRange(1) - yRange(2));
 zDim = abs(zRange(1) - zRange(2));
-currentFolder = pwd;
-matpath = currentFolder;
-figpath = currentFolder;
+path = uigetdir(pwd,'Select path for  output');
 figname = sprintf([name '_sect_' num2str(xDim) '_' num2str(yDim) '_' num2str(zDim)]);
 matname = sprintf([name '_sect_' num2str(xDim) '_' num2str(yDim) '_' num2str(zDim)]);
-saveas(gcf,[figpath figname])
-save([matpath matname],'o')
+saveas(gcf,[path '\' figname])
+save([path '\' matname],'o')
 
 %#ok<*AGROW>
 %#ok<*STRNU>
