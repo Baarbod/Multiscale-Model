@@ -35,6 +35,10 @@ for inod = 1:nnod
         Df = D(segInInd);
     end
     
+    if Qf == 0
+        continue
+    end
+    
     if length(segOutInd) == 2
         % phase separation
         alpha = segOutInd(1);
