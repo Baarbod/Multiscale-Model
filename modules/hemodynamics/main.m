@@ -13,8 +13,15 @@ edgenod = o.edgenod;
 nodnod = o.nodnod;
 inflowInd = o.inflowInd;
 outflowInd = o.outflowInd;
-
 G = graph(Adj);
+
+% deg1 = find(degree(G)==1);
+% deg1zcoord = xyz(degree(G)==1,3);
+% inIndex = find(deg1zcoord < 500);
+% inflowInd = deg1(inIndex);
+% outIndex = find(deg1zcoord >= 500);
+% outflowInd = deg1(outIndex);
+
 nseg = length(lseg); 
 nnod = numnodes(G); 
 
@@ -109,11 +116,11 @@ while (errh > tol) && (iter < maxiter)
     A = sparse(A);
     
     % solve linear system
-    try
-        X = A\b;
-    catch
+%     try
+%         X = A\b;
+%     catch
         X = pseudoinverse(A)*b;
-    end
+%     end
 
     % populate pressure vector
     P(pUnknown) = X;
@@ -147,7 +154,7 @@ while (errh > tol) && (iter < maxiter)
     h(hLow) = 0.1;
     
     % solve viscosity, units % [mPa*s] to [mmHg*s]
-%     u = computeviscosity(d,Deff,Dph,h)*1e-3/133.322;
+    u = computeviscosity(d,Deff,Dph,h)*1e-3/133.322;
     
     errh = abs(max(hprev - h));
     
@@ -162,13 +169,37 @@ while (errh > tol) && (iter < maxiter)
     errhVector(iter) = errh;
 end
 
-if iter > 1
-    figure
-    plot(1:iter-1,errhVector)
-end
-
 endmain = toc(startmain);
 
+%% Make Convergence plot
+if iter > 1
+    figure
+    hplot = plot(1:length(errhVector),errhVector);
+    hplot.LineWidth = 1.5;
+    hplot.Color = 'k';
+    ax = gca;
+    ax.Title.String = 'Convergence Plot';
+    ax.Title.FontSize = 14;
+    ax.YLabel.String = 'Error';
+    ax.YLabel.FontSize = 12;
+    ax.XLabel.String = 'Iterations';
+    ax.XLabel.FontSize = 12;
+end
+
+%% Make histogram for hematocrit
+figure
+hhist = histogram(h,'Normalization','probability');
+hhist.FaceColor = 'k';
+ax = gca;
+ax.Title.String = 'Hematocrit Distribution';
+ax.Title.FontSize = 14;
+ax.YLabel.String = 'Proportion';
+ax.YLabel.FontSize = 12;
+ax.XLabel.String = 'Hematocrit';
+ax.XLabel.FontSize = 12;
+ax.XLim = [0 1];
+
+%% Find velocity
 crossSecArea = pi*(d/2).^2;
 velocity = q./crossSecArea; % [um/s]
 velocity = velocity*0.001; % [um/s] to [mm/s]
@@ -209,7 +240,13 @@ q = q*1e-6*60; % [fL/s] to [nL/min]
 variable = q;
 % variable = velocity;
 numfig =  findobj('type','figure');
-ifig = length(numfig);
+nfig = length(numfig);
 climits = [min(variable) max(variable)];
-visualize(G,variable,xyz,ifig+1,'Flow','Flow',climits,1)
+visualize(G,variable,xyz,nfig+1,'Blood Flow Distribution','Flow',climits,2)
 
+variable = h;
+
+numfig =  findobj('type','figure');
+nfig = length(numfig);
+climits = [0.1 0.95];
+visualize(G,variable,xyz,nfig+1,'Hematocrit Distribution','Hematocrit',climits,2)
