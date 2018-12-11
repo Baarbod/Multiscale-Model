@@ -20,8 +20,6 @@ function getfullreduced(data,segperstrand)
 % Note: input data structure should be stored as a variable that contains
 %       a field called "vectorizedStructure".
 
-% Note: Save path is hard coded. Make sure to change the path if needed.
-
 %% Load data
 name = inputname(1);
 network = data;
@@ -277,12 +275,11 @@ o.strandList = newStrandRenamed;
 
 %% Save
 nps = length(strandNodList);
-matpath = 'G:\My Drive\matlab\research\kleinfeld_processing\output\matfiles\reduced\';
-figpath = 'G:\My Drive\matlab\research\kleinfeld_processing\output\figures\vanilla\reduced\';
+path = uigetdir(pwd,'Select path for  output');
 figname = sprintf([name '_reduced_nps_' num2str(nps)]);
 matname = sprintf([name '_reduced_nps_' num2str(nps)]);
-saveas(gcf,[figpath figname])
-save([matpath matname],'o')
+saveas(gcf,[path figname])
+save([path matname],'o')
 
 %#ok<*AGROW>
 %#ok<*STRNU>
