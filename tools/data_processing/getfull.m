@@ -16,8 +16,6 @@ function getfull(data)
 % Note: input data structure should be stored as a variable that contains
 %       a field called "vectorizedStructure".
 %
-% Note: Save path is hard coded. Make sure to change the path if needed.
-
 %% Load data
 name = inputname(1);
 network = data;
@@ -174,12 +172,11 @@ o.venFullNodePath = venFullNodePath;
 o.strandList = strandList;
 
 %% Save
-matpath = 'G:\My Drive\matlab\research\kleinfeld_processing\output\matfiles\full\';
-figpath = 'G:\My Drive\matlab\research\kleinfeld_processing\output\figures\vanilla\full\';
+path = uigetdir(pwd,'Select path for  output');
 figname = sprintf([name '_full']);
 matname = sprintf([name '_full']);
-saveas(gcf,[figpath figname])
-save([matpath matname],'o')
+saveas(gcf,[path figname])
+save([path matname],'o')
 
 %#ok<*AGROW>
 %#ok<*STRNU>
