@@ -11,16 +11,17 @@ d = o.d;
 lseg = o.lseg;
 edgenod = o.edgenod;
 nodnod = o.nodnod;
-inflowInd = o.inflowInd;
-outflowInd = o.outflowInd;
+% inflowInd = o.inflowInd;
+% outflowInd = o.outflowInd;
 G = graph(Adj);
 
-% deg1 = find(degree(G)==1);
-% deg1zcoord = xyz(degree(G)==1,3);
-% inIndex = find(deg1zcoord < 500);
-% inflowInd = deg1(inIndex);
-% outIndex = find(deg1zcoord >= 500);
-% outflowInd = deg1(outIndex);
+% network au_sect_150_125_200 only
+deg1 = find(degree(G)==1);
+deg1zcoord = xyz(degree(G)==1,3);
+inIndex = find(deg1zcoord < 500);
+inflowInd = deg1(inIndex);
+outIndex = find(deg1zcoord >= 500);
+outflowInd = deg1(outIndex);
 
 nseg = length(lseg); 
 nnod = numnodes(G); 
@@ -115,12 +116,12 @@ while (errh > tol) && (iter < maxiter)
     % convert to sparse
     A = sparse(A);
     
-    % solve linear system
-%     try
-%         X = A\b;
-%     catch
+%     solve linear system
+    try
+        X = A\b;
+    catch
         X = pseudoinverse(A)*b;
-%     end
+    end
 
     % populate pressure vector
     P(pUnknown) = X;
